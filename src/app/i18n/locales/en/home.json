@@ -6,7 +6,8 @@
   "recent": "Recent",
   "about": {
     "kicker": "About me",
-    "viewResume": "View full resume"
+    "viewResume": "View full resume",
+    "more": "More about me"
   },
   "skillsMarquee": {
     "kicker": "My stack",
@@ -33,13 +34,20 @@
   },
   "activity": {
     "kicker": "Coding activity",
-    "title": "Always building"
+    "title": "Always building",
+    "contributions": "contributions",
+    "last12Months": "last 12 months",
+    "languages": "languages",
+    "last7Days": "7 days"
   },
   "contact": {
     "kicker": "Get in touch",
     "title": "Let's talk",
     "description": "Pick a slot that works for you and let's chat about your project, an opportunity, or anything tech.",
-    "emailMe": "Email me instead"
+    "emailMe": "Email me instead",
+    "ratherTalk": "Rather talk?",
+    "or": "or",
+    "email": "email"
   },
   "greetings": {
     "filename": "Greetings.sh",
@@ -57,5 +65,17 @@
     "10": "Let's make them come into existence!",
     "11": "We'll create something marvelous together.",
     "12": "Scroll down to know more about me..."
+  },
+  "now": {
+    "label": "now",
+    "role": "role",
+    "based": "based",
+    "writing": "writing",
+    "building": "building",
+    "readBlog": "Read the blog",
+    "resume": "Resume"
+  },
+  "newsletter": {
+    "short": "Get new posts by email. No spam."
   }
 }

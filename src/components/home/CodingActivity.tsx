@@ -1,45 +1,94 @@
-'use client';
-import dynamicImport from 'next/dynamic';
-import {Fade} from 'react-awesome-reveal';
-import {useTranslation} from '../../app/i18n/client';
-import SectionHeader from './SectionHeader';
+import type {ReactNode} from 'react';
+import {createTranslation} from '@/app/i18n/server';
+import ContributionCalendar from './ContributionCalendar';
+import SectionLabel from './SectionLabel';
+import {fetchTopLanguages} from './wakatime';
 
-// react-activity-calendar renders different markup on the server, so skip SSR
-const CustomGithubCalendar = dynamicImport(
-  () => import('../CustomGithubCalendar'),
-  {ssr: false},
-);
+function Card({
+  label,
+  detail,
+  href,
+  linkText,
+  children,
+}: {
+  label: string;
+  detail: string;
+  href: string;
+  linkText: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="flex min-w-0 flex-col rounded-xl border border-line bg-panel p-5">
+      <p className="m-0 mb-4 flex items-baseline justify-between gap-3 font-mono text-xs whitespace-nowrap text-ink-muted">
+        <span className="text-xs">
+          {label}
+          <span className="hidden text-xs sm:inline"> · {detail}</span>
+        </span>
+        <a
+          href={href}
+          target="_blank"
+          rel="noreferrer"
+          className="text-xs hover:text-accent"
+        >
+          {linkText} ↗
+        </a>
+      </p>
+      {children}
+    </div>
+  );
+}
 
-const WakatimeCharts = dynamicImport(() => import('../WakatimeCharts'));
-
-export default function CodingActivity() {
-  const {t} = useTranslation('home');
+export default async function CodingActivity() {
+  const {t} = await createTranslation('home');
+  const languages = await fetchTopLanguages();
 
   return (
-    <section className="relative overflow-hidden px-4 py-16 sm:py-20">
-      <div
-        aria-hidden
-        className="bg-primary-300/20 dark:bg-primary-700/20 pointer-events-none absolute -top-24 right-[15%] size-72 rounded-full blur-3xl"
-      />
+    <section
+      aria-labelledby="coding-activity"
+      className="border-t border-line py-12"
+    >
+      <SectionLabel id="coding-activity">{t('activity.kicker')}</SectionLabel>
+      <div className="grid gap-6 lg:grid-cols-[auto_minmax(0,1fr)]">
+        <Card
+          label={t('activity.contributions')}
+          detail={t('activity.last12Months')}
+          href="https://github.com/pogicodes"
+          linkText="github"
+        >
+          <ContributionCalendar />
+        </Card>
 
-      <Fade direction="up" triggerOnce>
-        <SectionHeader
-          kicker={t('activity.kicker')}
-          title={t('activity.title')}
-        />
-      </Fade>
-
-      <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-8">
-        <Fade direction="up" triggerOnce className="w-full">
-          <div className="w-full overflow-hidden rounded-2xl border border-neutral-200 bg-white p-4 shadow-xs dark:border-neutral-700 dark:bg-neutral-800 sm:p-6">
-            <CustomGithubCalendar />
-          </div>
-        </Fade>
-        <Fade direction="up" triggerOnce className="w-full max-w-4xl">
-          <div className="w-full overflow-hidden rounded-2xl border border-neutral-200 bg-white p-4 shadow-xs dark:border-neutral-700 dark:bg-neutral-800 sm:p-6">
-            <WakatimeCharts />
-          </div>
-        </Fade>
+        {languages.length ? (
+          <Card
+            label={t('activity.languages')}
+            detail={t('activity.last7Days')}
+            href="https://wakatime.com/@codegino"
+            linkText="wakatime"
+          >
+            <ul className="m-0 my-auto list-none space-y-3 p-0 font-mono text-xs">
+              {languages.map((language, index) => (
+                <li key={language.name}>
+                  <div className="mb-1 flex justify-between">
+                    <span className="text-xs">{language.name}</span>
+                    <span className="text-xs text-ink-muted tabular-nums">
+                      {language.percent.toFixed(1)}%
+                    </span>
+                  </div>
+                  <div className="h-1.5 rounded-full bg-line">
+                    <div
+                      className="h-full rounded-full bg-accent"
+                      style={{
+                        width: `${language.percent}%`,
+                        opacity:
+                          language.name === 'Other' ? 0.35 : 1 - index * 0.1,
+                      }}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        ) : null}
       </div>
     </section>
   );
