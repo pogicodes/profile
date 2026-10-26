@@ -3,13 +3,17 @@ const WAKATIME_LANGUAGES_SVG =
 
 export type LanguageShare = {name: string; percent: number};
 
+const ENTITIES: Record<string, string> = {
+  '&amp;': '&',
+  '&lt;': '<',
+  '&gt;': '>',
+  '&#39;': "'",
+  '&quot;': '"',
+};
+
+// One pass, so "&amp;lt;" becomes "&lt;" rather than being decoded twice.
 const decodeEntities = (text: string) =>
-  text
-    .replaceAll('&amp;', '&')
-    .replaceAll('&lt;', '<')
-    .replaceAll('&gt;', '>')
-    .replaceAll('&#39;', "'")
-    .replaceAll('&quot;', '"');
+  text.replace(/&(?:amp|lt|gt|#39|quot);/g, entity => ENTITIES[entity]);
 
 /**
  * Top languages from the last 7 days, as shares of code-only time.
