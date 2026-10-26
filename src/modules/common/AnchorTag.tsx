@@ -1,21 +1,19 @@
-import type {HTMLAttributes} from 'react';
+import type {AnchorHTMLAttributes} from 'react';
+
+const isExternal = (href?: string) => !!href && /^https?:\/\//.test(href);
 
 const BlogAnchor = ({
   children,
+  href,
   ...props
-}: HTMLAttributes<HTMLAnchorElement>) => {
-  return (
-    <a
-      className="underline-on-hover underline--dark text-green-800 dark:text-primary-300"
-      target="_blank"
-      aria-label={children as string}
-      rel="noreferrer"
-      title={children as string}
-      {...props}
-    >
-      {children}
-    </a>
-  );
-};
+}: AnchorHTMLAttributes<HTMLAnchorElement>) => (
+  <a
+    href={href}
+    {...(isExternal(href) ? {target: '_blank', rel: 'noreferrer'} : {})}
+    {...props}
+  >
+    {children}
+  </a>
+);
 
 export default BlogAnchor;

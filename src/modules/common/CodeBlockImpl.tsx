@@ -76,98 +76,87 @@ const CodeBlockImpl: FunctionComponent<CodeBlockProps> = ({
     }
   }
 
+  const showMarkers = Boolean(add || del);
+
   return (
-    <>
-      <code className="relative my-2">
+    <div className="my-6">
+      <div className="overflow-hidden rounded-lg bg-terminal text-terminal-ink ring-1 ring-black/10 dark:ring-white/10">
         {!noHeader && (
-          <span
-            className="
-        relative top-1 flex h-6 w-full justify-between rounded-t-lg pl-2 pr-1 text-right ring-1 ring-neutral-200 file:bg-neutral-100 dark:ring-neutral-800
-        "
-          >
-            <span className="inline-block truncate text-neutral-700 dark:text-neutral-300">
+          <div className="flex h-9 items-center justify-between gap-4 border-b border-white/10 px-4 font-mono text-xs text-white/55">
+            <span className="truncate text-xs">
               {fileName ? fileName : ''}
-              {!noExt && languageLabel}
+              {!noExt && !fileName?.endsWith(languageLabel) && languageLabel}
             </span>
             <ClipboardCopyButton value={children} />
-          </span>
+          </div>
         )}
         <Highlight
           theme={themes.vsDark}
           code={children.trim()}
           language={language}
         >
-          {({className, style, tokens, getLineProps, getTokenProps}) => (
-            <div className="relative">
-              {!noLine && (
-                <span className="absolute inset-y-0 left-0 z-10 flex flex-col rounded-md pt-2">
-                  {tokens.map((_, i) => (
-                    <span
-                      className="min-w-8 max-w-8 select-none bg-[#1e1e1e] pl-2 pr-3
-                    text-right code-line-height text-white
-                    "
-                      key={i}
-                    >
-                      {i + 1}
-                      {add && addedLines.has(i + 1) && (
-                        <span className="absolute left-0 inline-block w-[4.25ch] text-right text-green-400">
-                          +
-                        </span>
-                      )}
-                      {del && removedLines.has(i + 1) && (
-                        <span className="absolute left-0 inline-block w-[4.25ch] text-right text-red-400">
-                          -
-                        </span>
-                      )}
-                    </span>
-                  ))}
-                </span>
-              )}
+          {({tokens, getLineProps, getTokenProps}) => (
+            <pre className="m-0 overflow-x-auto py-3 font-mono text-[13px] leading-6 sm:text-sm [&_*]:text-[length:inherit]">
+              <code className="grid min-w-max">
+                {tokens.map((line, i) => {
+                  const lineNumber = i + 1;
+                  const isAdded = addedLines.has(lineNumber);
+                  const isRemoved = removedLines.has(lineNumber);
+                  const {className: lineClassName, style: lineStyle} =
+                    getLineProps({line});
 
-              <span
-                className={clsx(
-                  'relative my-1 flex flex-col overflow-auto p-2 text-lg code-line-height',
-                  'no-scrollbar rounded-b-md shadow-xs shadow-black',
-                  className,
-                  {
-                    'pl-8': !noLine,
-                    'ml-3': add || del,
-                  },
-                )}
-                style={style}
-              >
-                {tokens.map((line, i) => (
-                  <span {...getLineProps({line, key: i})} key={i}>
-                    {line.map((token, key) => (
-                      <span
-                        {...getTokenProps({token, key})}
-                        key={key}
-                        className={clsx({
-                          'text-green-400!': add && addedLines.has(i + 1),
-                          'text-red-400!': del && removedLines.has(i + 1),
-                        })}
-                      />
-                    ))}
-                  </span>
-                ))}
-              </span>
-            </div>
+                  return (
+                    <span
+                      key={i}
+                      style={lineStyle}
+                      className={clsx(
+                        lineClassName,
+                        'flex min-h-6 px-4',
+                        isAdded && 'bg-green-500/10',
+                        isRemoved && 'bg-red-500/10',
+                      )}
+                    >
+                      {!noLine && (
+                        <span className="mr-4 inline-block w-6 shrink-0 text-right text-white/30 select-none">
+                          {lineNumber}
+                        </span>
+                      )}
+                      {showMarkers && (
+                        <span
+                          aria-hidden
+                          className={clsx(
+                            'mr-2 inline-block w-3 shrink-0 select-none',
+                            isAdded && 'text-green-400',
+                            isRemoved && 'text-red-400',
+                          )}
+                        >
+                          {isAdded ? '+' : isRemoved ? '-' : ' '}
+                        </span>
+                      )}
+                      <span>
+                        {line.map((token, key) => (
+                          <span key={key} {...getTokenProps({token})} />
+                        ))}
+                      </span>
+                    </span>
+                  );
+                })}
+              </code>
+            </pre>
           )}
         </Highlight>
-      </code>
+      </div>
       {codePenID && (
-        <div>
-          <NextLink
-            href={`https://codepen.io/codegino/pen/${codePenID}`}
-            target="_blank"
-            rel="noreferrer"
-            className="underline-on-hover underline-dark"
-          >
-            Link to Codepen
-          </NextLink>
-        </div>
+        <NextLink
+          href={`https://codepen.io/codegino/pen/${codePenID}`}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-2 inline-block font-mono text-xs text-accent"
+        >
+          Open in CodePen ↗
+        </NextLink>
       )}
-    </>
+    </div>
   );
 };
 

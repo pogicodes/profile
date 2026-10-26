@@ -5,7 +5,6 @@ export const navigationLinks: NavLink[] = [
   {url: '/about', label: 'about'},
   {url: '/blog', label: 'blog'},
   {url: 'https://note.carlogino.com', label: 'Notes'},
-  {url: 'https://gpt.carlogino.com', label: 'Chatbot', target: '_blank'},
 ];
 
 type NavLink = {

@@ -1,22 +1,14 @@
-import GreetingsContent from '@/components/GreetingsContent';
 import type {NextPage} from 'next';
-import dynamicImport from 'next/dynamic';
-import {FullScreenWrapper} from '../components/FullScreenWrapper';
-import AboutTeaser from '../components/home/AboutTeaser';
+import AboutBlurb from '../components/home/AboutBlurb';
 import CodingActivity from '../components/home/CodingActivity';
-import ContactCta from '../components/home/ContactCta';
+import HomeTerminal from '../components/home/HomeTerminal';
+import LatestWriting from '../components/home/LatestWriting';
+import NewsletterCard from '../components/home/NewsletterCard';
+import NowPanel from '../components/home/NowPanel';
 import SideProjects from '../components/home/SideProjects';
-import SkillsHighlights from '../components/home/SkillsHighlights';
 import {newCommonMetaTags} from '../frontend-utils/meta-tags';
-import BlogSuggestionsList from '../modules/blog/BlogSuggestionsList';
 import {getBlurringImage} from '../utils/contentful.utils';
 import {getBlogsMetadata} from '../utils/mdx.utils';
-import {fetchSkills} from '../utils/resume-props';
-import ParallaxEyes from '../components/ParallaxEyes';
-
-const SubscribeForm = dynamicImport(
-  () => import('../components/SubscribeForm'),
-);
 
 export const metadata = {
   ...newCommonMetaTags('Home Page', '/'),
@@ -25,7 +17,7 @@ export const metadata = {
 
 const HomePage: NextPage = async () => {
   const {
-    props: {skills, profileImage, profileSvg, blogs},
+    props: {profileImage, profileSvg, blogs},
   } = await getStaticProps();
 
   return (
@@ -43,68 +35,23 @@ const HomePage: NextPage = async () => {
           }),
         }}
       />
-      <FullScreenWrapper
-        bl
-        className="flex h-screen min-h-screen w-full items-center justify-center bg-neutral-200 dark:bg-neutral-900"
-      >
-        <ParallaxEyes />
-        <GreetingsContent />
+      <main className="mx-auto max-w-6xl px-5">
+        <div className="grid gap-6 py-10 lg:grid-cols-[1.5fr_1fr] lg:py-14">
+          <HomeTerminal />
+          <NowPanel img={profileImage} svg={profileSvg} latestBlog={blogs[0]} />
+        </div>
 
-        {/* Decorative background accents */}
-        <div
-          aria-hidden
-          className="bg-primary-300/20 dark:bg-primary-700/20 pointer-events-none absolute -top-24 right-[10%] size-72 rounded-full blur-3xl"
-        />
-        <div
-          aria-hidden
-          className="bg-primary-200/20 dark:bg-primary-800/20 pointer-events-none absolute -bottom-32 left-[5%] size-96 rounded-full blur-3xl"
-        />
+        <div className="grid gap-12 border-t border-line py-12 lg:grid-cols-[1fr_320px]">
+          <LatestWriting blogs={blogs} />
+          <aside className="space-y-10 lg:sticky lg:top-20 lg:self-start">
+            <SideProjects />
+            <AboutBlurb />
+            <NewsletterCard />
+          </aside>
+        </div>
 
-        <svg
-          className="absolute inset-0 -z-10 size-full stroke-primary-900 mask-[radial-gradient(50%_105%_at_bottom,black,transparent)] dark:stroke-primary-50"
-          aria-hidden="true"
-        >
-          <defs>
-            <pattern
-              id="0787a7c5-978c-4f66-83c7-11c213f99cb7"
-              width={200}
-              height={200}
-              x="50%"
-              y={-1}
-              patternUnits="userSpaceOnUse"
-            >
-              <path d="M.5 200V.5H200" fill="none" />
-            </pattern>
-          </defs>
-          <rect
-            width="100%"
-            height="100%"
-            strokeWidth={0}
-            fill="url(#0787a7c5-978c-4f66-83c7-11c213f99cb7)"
-          />
-        </svg>
-      </FullScreenWrapper>
-      <main>
-        <div id="resume-summary" className="bg-neutral-100 dark:bg-neutral-800">
-          <AboutTeaser img={profileImage} svg={profileSvg} />
-          <SkillsHighlights skills={skills} />
-        </div>
-        <div className="bg-neutral-50 dark:bg-neutral-700">
-          <SideProjects />
-        </div>
-        <div className="bg-neutral-100 dark:bg-neutral-800">
-          <BlogSuggestionsList blogs={blogs} />
-        </div>
-        <div className="bg-neutral-50 dark:bg-neutral-700">
-          <CodingActivity />
-        </div>
-        <div className="bg-neutral-100 dark:bg-neutral-800" id="contact">
-          <ContactCta />
-        </div>
+        <CodingActivity />
       </main>
-      <div className="bg-neutral-50 dark:bg-neutral-700" id="subscribe">
-        <SubscribeForm />
-      </div>
     </>
   );
 };
@@ -116,13 +63,10 @@ const getStaticProps = async () => {
 
   const blogs = (await getBlogsMetadata())
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .slice(0, 4);
-
-  const skills = await fetchSkills(true);
+    .slice(0, 5);
 
   return {
     props: {
-      skills,
       blogs,
       profileImage,
       profileSvg,

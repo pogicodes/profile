@@ -6,7 +6,12 @@
   "recent": "Senaste",
   "about": {
     "kicker": "Om mig",
-    "viewResume": "Se hela CV:t"
+    "viewResume": "Se hela CV:t",
+    "more": "Mer om mig",
+    "title": "Om Carlo Gino Catapang",
+    "elsewhere": "På andra ställen",
+    "seeAlso": "Se även",
+    "source": "Källkoden till sidan"
   },
   "skillsMarquee": {
     "kicker": "Min stack",
@@ -33,13 +38,20 @@
   },
   "activity": {
     "kicker": "Kodningsaktivitet",
-    "title": "Bygger alltid"
+    "title": "Bygger alltid",
+    "contributions": "bidrag",
+    "last12Months": "senaste 12 månaderna",
+    "languages": "språk",
+    "last7Days": "7 dagar"
   },
   "contact": {
     "kicker": "Hör av dig",
     "title": "Låt oss prata",
     "description": "Välj en tid som passar dig så pratar vi om ditt projekt, en möjlighet eller vad som helst inom teknik.",
-    "emailMe": "Mejla mig i stället"
+    "emailMe": "Mejla mig i stället",
+    "ratherTalk": "Hellre prata?",
+    "or": "eller",
+    "email": "mejl"
   },
   "greetings": {
     "filename": "Hälsningsfraser.sh",
@@ -57,5 +69,17 @@
     "10": "Låt oss få dem att komma till stånd!",
     "11": "Vi skapar något fantastiskt tillsammans.",
     "12": "Scrolla ner för att veta mer om mig..."
+  },
+  "now": {
+    "label": "nu",
+    "role": "roll",
+    "based": "bor i",
+    "writing": "skriver",
+    "building": "bygger",
+    "readBlog": "Läs bloggen",
+    "resume": "CV"
+  },
+  "newsletter": {
+    "short": "Få nya inlägg via mejl. Ingen spam."
   }
 }

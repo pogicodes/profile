@@ -29,7 +29,7 @@ export default function CustomGithubCalendar() {
 
         <div className="max-w-lg overflow-x-auto pb-4  sm:max-w-6xl [&_.react-activity-calendar]:px-10">
           <GitHubCalendar
-            username="codegino"
+            username="pogicodes"
             fontSize={30}
             blockMargin={4}
             blockRadius={1}

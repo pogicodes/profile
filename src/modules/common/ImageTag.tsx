@@ -1,7 +1,7 @@
 import Image, {type ImageProps} from 'next/image';
 
 const BlogImg = ({width = 1100, height = 600, ...props}: ImageProps) => (
-  <div className="size-full px-8">
+  <span className="my-8 block">
     <Image
       {...props}
       width={width}
@@ -9,10 +9,11 @@ const BlogImg = ({width = 1100, height = 600, ...props}: ImageProps) => (
       alt={props.alt || 'An image of a blog post'}
       title={props.title || 'An image of a blog post'}
       placeholder="blur"
-      className="object-contain object-center"
+      sizes="(max-width: 768px) 100vw, 720px"
+      className="h-auto w-full rounded-lg object-contain object-center"
       blurDataURL="/assets/blog-placeholder.jpeg"
     />
-  </div>
+  </span>
 );
 
 export default BlogImg;

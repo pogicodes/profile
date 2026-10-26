@@ -1,39 +1,75 @@
 'use client';
 
 import clsx from 'clsx';
-import {type FunctionComponent} from 'react';
+import {useState, type FunctionComponent} from 'react';
 import {useTranslation} from '../../app/i18n/client';
 
+const VISIBLE_TAGS = 8;
+
 const BlogsFilter: FunctionComponent<{
+  /** Most-used first. */
   tags: string[];
   selectedTags: string[];
   handleTagClick: (tag: string) => void;
-}> = ({tags, handleTagClick, selectedTags}) => {
+  onClear: () => void;
+}> = ({tags, handleTagClick, selectedTags, onClear}) => {
   const {t} = useTranslation('blog');
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Selected tags stay visible even when the list is collapsed.
+  const visibleTags = isExpanded
+    ? tags
+    : tags.filter(
+        (tag, index) => index < VISIBLE_TAGS || selectedTags.includes(tag),
+      );
+  const hiddenCount = tags.length - visibleTags.length;
+
+  const chipClass =
+    'rounded px-2 py-1 font-mono text-xs transition-colors hover:bg-panel hover:text-ink';
 
   return (
-    <section className="mb-8 flex max-w-4xl flex-col items-center">
-      <h3 className="mb-4 text-neutral-700 dark:text-neutral-200">
-        {t('filterByTags')}
-      </h3>
-      <div className="mb-4 flex flex-wrap justify-center gap-2">
-        {tags.map((tag, i) => (
-          <div
-            className={clsx(
-              'mr-2 inline-block cursor-pointer whitespace-nowrap rounded-xl bg-white px-3 py-1 shadow-md last:mr-0 dark:bg-black',
-              {
-                'text-primary-600 bg-primary-800': selectedTags.includes(tag),
-              },
-            )}
+    <fieldset className="m-0 flex min-w-0 flex-wrap items-center gap-1 border-0 p-0">
+      <legend className="sr-only">{t('filterByTags')}</legend>
+      {visibleTags.map(tag => {
+        const isSelected = selectedTags.includes(tag);
+
+        return (
+          <button
+            key={tag}
+            type="button"
+            aria-pressed={isSelected}
             onClick={() => handleTagClick(tag)}
-            role="presentation"
-            key={i}
+            className={clsx(
+              chipClass,
+              isSelected
+                ? 'bg-accent text-accent-ink hover:bg-accent hover:text-accent-ink'
+                : 'text-ink-muted',
+            )}
           >
-            {tag}
-          </div>
-        ))}
-      </div>
-    </section>
+            #{tag}
+          </button>
+        );
+      })}
+      {hiddenCount > 0 || isExpanded ? (
+        <button
+          type="button"
+          aria-expanded={isExpanded}
+          onClick={() => setIsExpanded(expanded => !expanded)}
+          className={clsx(chipClass, 'text-accent')}
+        >
+          {isExpanded ? t('fewerTags') : t('moreTags', {count: hiddenCount})}
+        </button>
+      ) : null}
+      {selectedTags.length ? (
+        <button
+          type="button"
+          onClick={onClear}
+          className={clsx(chipClass, 'text-ink-muted underline')}
+        >
+          {t('clearTags')}
+        </button>
+      ) : null}
+    </fieldset>
   );
 };
 
