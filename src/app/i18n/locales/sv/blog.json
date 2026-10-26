@@ -1,5 +1,18 @@
 {
   "myBlogs": "Mina bloggar",
   "filterByTags": "Filtrera efter taggar",
-  "date": "{{val, datetime}}"
+  "date": "{{val, datetime}}",
+  "search": "Sök inlägg",
+  "moreTags": "+{{count}} till",
+  "fewerTags": "färre",
+  "clearTags": "rensa",
+  "noResults": "Inga inlägg matchar.",
+  "reset": "Återställ filter",
+  "minRead": "{{count}} min läsning",
+  "onThisPage": "På den här sidan",
+  "share": "Dela",
+  "copyLink": "Kopiera länk",
+  "copied": "Kopierad",
+  "allPosts": "Alla inlägg",
+  "postCount": "{{count}} inlägg"
 }

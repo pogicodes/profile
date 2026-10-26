@@ -1,5 +1,18 @@
 {
   "myBlogs": "My Blogs",
   "filterByTags": "Filter by tags",
-  "date": "{{val, datetime}}"
+  "date": "{{val, datetime}}",
+  "search": "Search posts",
+  "moreTags": "+{{count}} more",
+  "fewerTags": "fewer",
+  "clearTags": "clear",
+  "noResults": "No posts match that.",
+  "reset": "Reset filters",
+  "minRead": "{{count}} min read",
+  "onThisPage": "On this page",
+  "share": "Share",
+  "copyLink": "Copy link",
+  "copied": "Copied",
+  "allPosts": "All posts",
+  "postCount": "{{count}} posts"
 }

@@ -1,10 +1,10 @@
 import {getBlogBanner} from '@/data/blog-asset';
 import {newCommonMetaTags} from '@/frontend-utils/meta-tags';
 import type {IBlogMetadata} from '@/models/mdxFiles';
-import BlogContent from '@/modules/blog/BlogContent';
+import {renderBlog} from '@/modules/blog/BlogContent';
 import BlogFooter from '@/modules/blog/BlogFooter';
 import BlogHeader from '@/modules/blog/BlogHeader';
-import BlogLayout from '@/modules/common/ContentLayout';
+import OnThisPage from '@/modules/blog/OnThisPage';
 import {blurImage} from '@/utils/image-blur.utils';
 import {BLOGS_PATH, getBlogsMetadata} from '@/utils/mdx.utils';
 import fs from 'fs';
@@ -57,8 +57,9 @@ const BlogPage: NextPage<{
     img,
     svg,
     content,
-    scope,
   } = await getStaticProps(param.slug);
+
+  const {Content, toc} = await renderBlog(content);
 
   if (!blog) {
     return (
@@ -93,17 +94,38 @@ const BlogPage: NextPage<{
         }}
       />
 
-      <main role="main">
-        <BlogLayout>
-          <BlogHeader blog={blog} img={img} svg={svg} />
-          <BlogContent content={content} scope={scope} />
-          <br />
-          <BlogFooter blog={blog} />
-        </BlogLayout>
+      <main className="mx-auto max-w-6xl px-5 py-10 lg:py-14">
+        <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-16">
+          <div className="max-w-[720px] min-w-0">
+            <BlogHeader
+              blog={blog}
+              readingMinutes={readingMinutes(content)}
+              img={img}
+              svg={svg}
+            />
+            <div className="mt-10 lg:hidden">
+              <OnThisPage toc={toc} variant="inline" />
+            </div>
+            <article className="prose-blog mt-10 lg:mt-12">
+              <Content />
+            </article>
+            <BlogFooter blog={blog} />
+          </div>
+          <aside className="hidden lg:block">
+            <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
+              <OnThisPage toc={toc} variant="sidebar" />
+            </div>
+          </aside>
+        </div>
       </main>
     </>
   );
 };
+
+const WORDS_PER_MINUTE = 220;
+
+const readingMinutes = (content: string) =>
+  Math.max(1, Math.round(content.split(/\s+/).length / WORDS_PER_MINUTE));
 
 const getStaticProps = async (slug: string) => {
   const postFilePath = path.join(BLOGS_PATH, `${slug}.mdx`);
@@ -119,7 +141,6 @@ const getStaticProps = async (slug: string) => {
 
   return {
     content,
-    scope: data,
     frontMatter: {
       ...data,
       slug,

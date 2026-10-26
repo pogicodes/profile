@@ -2,6 +2,7 @@
 
 import {parseAsString, useQueryState} from 'next-usequerystate';
 import {useEffect, useState} from 'react';
+import {useTranslation} from '../i18n/client';
 import SearchIcon from '../assets/icons/search-icon';
 import CloseIcon from '../assets/icons/close-icon';
 
@@ -49,14 +50,15 @@ function DebouncedInput({
   return (
     <input
       {...props}
-      className="w-full rounded-md bg-transparent ring-1 ring-neutral-500 focus:outline-hidden dark:ring-neutral-200 md:pl-8"
-      value={value}
+      className="w-full rounded-md border border-line bg-canvas py-2 pr-9 pl-9 text-sm outline-none focus:border-accent [&::-webkit-search-cancel-button]:hidden"
+      value={value ?? ''}
       onChange={e => setValue(e.target.value)}
     />
   );
 }
 
 export default function SearchField() {
+  const {t} = useTranslation('blog');
   const [searchFilter, setSearchFilter] = useQueryState(
     'search',
     parseAsString
@@ -77,10 +79,12 @@ export default function SearchField() {
   };
 
   return (
-    <div className="relative flex w-96 items-center">
-      <SearchIcon className="absolute ml-2 size-4 text-neutral-600  dark:text-neutral-200" />
+    <div className="relative flex w-full items-center">
+      <SearchIcon className="pointer-events-none absolute left-3 size-4 text-ink-muted" />
       <DebouncedInput
-        placeholder="Filter by title or description"
+        type="search"
+        aria-label={t('search')}
+        placeholder={t('search')}
         value={searchFilter}
         onChange={handleGlobalFilterChange}
       />
@@ -88,12 +92,12 @@ export default function SearchField() {
         <button
           type="button"
           aria-label="Clear search"
-          className="absolute right-0 mr-2 flex size-4"
+          className="absolute right-3 flex size-4 text-ink-muted hover:text-ink"
           onClick={() => {
             setSearchFilter(null);
           }}
         >
-          <CloseIcon className="text-red-600 dark:text-neutral-200 " />
+          <CloseIcon />
         </button>
       )}
     </div>

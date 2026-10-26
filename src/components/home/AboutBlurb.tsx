@@ -1,6 +1,6 @@
 import {createTranslation} from '@/app/i18n/server';
 import NextLink from '@/components/basic/NextLink';
-import SectionLabel from './SectionLabel';
+import SectionLabel from '@/components/SectionLabel';
 
 export default async function AboutBlurb() {
   const {t} = await createTranslation('home');

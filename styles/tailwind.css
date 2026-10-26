@@ -190,3 +190,98 @@
     display: inline-block;
   }
 }
+
+/* Long-form post typography. Components layer so utilities still win. */
+@layer components {
+  .prose-blog {
+    @apply text-ink;
+    font-size: 1.0625rem;
+    line-height: 1.75;
+
+    & :where(p, li, a, strong, em, td, th) {
+      font-size: inherit;
+      line-height: inherit;
+    }
+
+    & :where(p) {
+      @apply my-5;
+    }
+
+    & :where(h2, h3, h4) {
+      @apply text-left font-semibold tracking-tight text-ink;
+      scroll-margin-top: 5rem;
+    }
+    & :where(h2) {
+      @apply mt-14 mb-4 text-2xl;
+    }
+    & :where(h3) {
+      @apply mt-10 mb-3 text-xl;
+    }
+    & :where(h4) {
+      @apply mt-8 mb-2 text-lg;
+    }
+    & :where([id]) {
+      scroll-margin-top: 5rem;
+    }
+
+    & :where(a) {
+      @apply text-accent underline decoration-1 underline-offset-4;
+    }
+    & :where(a:hover) {
+      @apply decoration-2;
+    }
+
+    & :where(ul, ol) {
+      @apply my-5 pl-6;
+    }
+    & :where(ul) {
+      @apply list-disc;
+    }
+    & :where(ol) {
+      @apply list-decimal;
+    }
+    & :where(li) {
+      @apply my-1.5 pl-1;
+    }
+    & :where(li)::marker {
+      @apply text-ink-muted;
+    }
+
+    & :where(blockquote) {
+      @apply my-6 rounded-r-lg border-l-2 border-accent bg-panel px-5 py-1;
+    }
+    & :where(blockquote p) {
+      @apply my-3;
+    }
+
+    & :where(:not(pre) > code) {
+      @apply rounded border border-line bg-panel px-1.5 py-0.5 font-mono;
+      font-size: 0.875em;
+    }
+
+    & :where(hr) {
+      @apply my-12 border-line;
+    }
+
+    & :where(table) {
+      @apply my-6 w-full border-collapse text-left;
+      font-size: 0.9375rem;
+    }
+    & :where(th, td) {
+      @apply border-b border-line px-3 py-2;
+    }
+
+    & :where(img) {
+      @apply rounded-lg;
+    }
+
+    & > :first-child {
+      @apply mt-0;
+    }
+
+    /* Posts used <br /> as paragraph spacing; margins handle that now. */
+    & > br {
+      display: none;
+    }
+  }
+}

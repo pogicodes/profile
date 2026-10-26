@@ -1,59 +1,92 @@
-'use client';
-import type {FunctionComponent} from 'react';
-import {useTranslation} from '../../app/i18n/client';
+import {createTranslation} from '../../app/i18n/server';
 import {BlurringImage} from '../../components/BlurringImage';
+import NextLink from '../../components/basic/NextLink';
 import type {IBlogMetadata} from '../../models/mdxFiles';
 import type {BlurImageType} from '../../utils/image-blur.utils';
 
 type Props = {
   blog: IBlogMetadata;
+  readingMinutes: number;
   // Optional: drafts have no banner asset mapped yet.
 } & Partial<Pick<BlurImageType, 'svg' | 'img'>>;
 
-const BlogHeader: FunctionComponent<Props> = ({blog, img, svg}) => {
-  const {t} = useTranslation('common');
+const formatDate = (date: string) =>
+  new Intl.DateTimeFormat('en', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(new Date(date));
+
+export default async function BlogHeader({
+  blog,
+  readingMinutes,
+  img,
+  svg,
+}: Props) {
+  const {t} = await createTranslation('blog');
 
   return (
-    <article className="flex flex-col items-center text-center sm:pt-4">
-      <h1 className="mb-0 text-balance text-4xl">{blog.title}</h1>
-      {blog.description && (
-        <h2 className="description text-balance">{blog.description}</h2>
-      )}
-      <p className="mb-4 w-full text-neutral-700 dark:text-neutral-200">
-        {t('date', {
-          val: new Date(blog.date),
-          formatParams: {
-            val: {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            },
-          },
-        })}
+    <header>
+      <NextLink
+        href="/blog"
+        className="font-mono text-xs text-ink-muted hover:text-accent"
+      >
+        ← {t('allPosts').toLowerCase()}
+      </NextLink>
+      <h1 className="m-0 mt-5 text-left text-3xl leading-tight font-semibold tracking-tight text-balance sm:text-5xl">
+        {blog.title}
+      </h1>
+      {blog.description ? (
+        <p className="m-0 mt-4 text-lg text-balance text-ink-muted">
+          {blog.description}
+        </p>
+      ) : null}
+      <p className="m-0 mt-5 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs text-ink-muted">
+        <time dateTime={blog.date} className="text-xs">
+          {formatDate(blog.date)}
+        </time>
+        <span aria-hidden className="text-xs">
+          ·
+        </span>
+        <span className="text-xs">{t('minRead', {count: readingMinutes})}</span>
+        {blog.tags?.length ? (
+          <>
+            <span aria-hidden className="text-xs">
+              ·
+            </span>
+            {blog.tags.map(tag => (
+              <NextLink
+                key={tag}
+                href={`/blog?tags=${encodeURIComponent(tag)}`}
+                className="text-xs hover:text-accent"
+              >
+                #{tag}
+              </NextLink>
+            ))}
+          </>
+        ) : null}
       </p>
       {img && svg && !blog.hideBanner ? (
-        <div className="relative flex h-[60vh] max-h-140 w-[95vw] items-center justify-center md:max-h-200 lg:h-140 lg:w-260 lg:px-10">
-          <BlurringImage
-            alt={blog.bannerDescription}
-            title={blog.bannerDescription}
-            img={img}
-            svg={svg}
-            fill
-            sizes="(max-width: 1024px) 95vw, 1040px"
-            priority={true}
-            className="rounded-xl object-cover object-center shadow-xs shadow-neutral-900"
-          />
-        </div>
+        <figure className="m-0 mt-8">
+          <div className="relative aspect-video overflow-hidden rounded-xl ring-1 ring-line">
+            <BlurringImage
+              alt={blog.bannerDescription}
+              title={blog.bannerDescription}
+              img={img}
+              svg={svg}
+              fill
+              sizes="(max-width: 768px) 100vw, 720px"
+              priority={true}
+              className="object-cover object-center"
+            />
+          </div>
+          {blog.bannerDescription ? (
+            <figcaption className="mt-2 font-mono text-xs text-ink-muted">
+              {blog.bannerDescription}
+            </figcaption>
+          ) : null}
+        </figure>
       ) : null}
-      {blog.bannerDescription ? (
-        <aside className="mt-1 line-clamp-1 w-full text-sm text-neutral-700 dark:text-neutral-200">
-          {blog.bannerDescription}
-        </aside>
-      ) : null}
-      <br />
-    </article>
+    </header>
   );
-};
-
-export default BlogHeader;
+}

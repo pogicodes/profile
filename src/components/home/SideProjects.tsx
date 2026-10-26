@@ -1,5 +1,5 @@
 import {createTranslation} from '@/app/i18n/server';
-import SectionLabel from './SectionLabel';
+import SectionLabel from '@/components/SectionLabel';
 import {sideProjects} from './side-projects';
 
 export default async function SideProjects() {

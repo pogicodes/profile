@@ -5,11 +5,8 @@ const PreToCodeBlock = (preProps: any) => {
   const props = preToCodeBlock(preProps);
 
   if (props) {
-    return (
-      <pre>
-        <CodeBlockImpl {...props} />
-      </pre>
-    );
+    // CodeBlockImpl renders its own <pre>.
+    return <CodeBlockImpl {...props} />;
   } else {
     return <pre {...preProps} />;
   }

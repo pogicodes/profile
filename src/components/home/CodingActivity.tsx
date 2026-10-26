@@ -1,7 +1,7 @@
 import type {ReactNode} from 'react';
 import {createTranslation} from '@/app/i18n/server';
 import ContributionCalendar from './ContributionCalendar';
-import SectionLabel from './SectionLabel';
+import SectionLabel from '@/components/SectionLabel';
 import {fetchTopLanguages} from './wakatime';
 
 function Card({

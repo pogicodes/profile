@@ -4,7 +4,7 @@ import NextLink from '@/components/basic/NextLink';
 import type {IBlogMetadata} from '@/models/mdxFiles';
 import type {BlurImageType} from '@/utils/image-blur.utils';
 import Eyes from './Eyes';
-import SectionLabel from './SectionLabel';
+import SectionLabel from '@/components/SectionLabel';
 import {sideProjects} from './side-projects';
 
 type Props = Pick<BlurImageType, 'img' | 'svg'> & {latestBlog?: IBlogMetadata};
