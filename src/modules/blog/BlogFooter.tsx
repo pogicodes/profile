@@ -32,7 +32,7 @@ const BlogFooter = ({blog}: {blog: IBlogMetadata}) => {
         <i>Connect with me</i>
       </p>
       <NextLink
-        href="https://twitter.com/codegino"
+        href="https://x.com/pogicodes"
         aria-label="Follow me on Twitter"
         target="_blank"
         className="mt-2"

@@ -3,16 +3,16 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-primary-50: hsl(125, 65%, 93%);
-  --color-primary-100: hsl(125, 49%, 84%);
-  --color-primary-200: hsl(125, 42%, 74%);
-  --color-primary-300: hsl(125, 38%, 63%);
-  --color-primary-400: hsl(125, 35%, 51%);
-  --color-primary-500: hsl(125, 39%, 41%);
-  --color-primary-600: hsl(125, 47%, 35%);
-  --color-primary-700: hsl(125, 56%, 29%);
-  --color-primary-800: hsl(125, 73%, 20%);
-  --color-primary-900: hsl(125, 86%, 14%);
+  --color-primary-50: hsl(140, 65%, 93%);
+  --color-primary-100: hsl(140, 49%, 84%);
+  --color-primary-200: hsl(140, 42%, 74%);
+  --color-primary-300: hsl(140, 38%, 63%);
+  --color-primary-400: hsl(140, 35%, 51%);
+  --color-primary-500: hsl(140, 39%, 41%);
+  --color-primary-600: hsl(140, 47%, 35%);
+  --color-primary-700: hsl(140, 56%, 29%);
+  --color-primary-800: hsl(140, 73%, 20%);
+  --color-primary-900: hsl(140, 86%, 14%);
 
   --breakpoint-xs: 400px;
 
@@ -28,8 +28,45 @@
 
 /* `inline` so the font vars injected by next/font on <html> win over :root. */
 @theme inline {
-  --font-inter: var(--font-inter);
-  --font-roboto: var(--font-roboto);
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* Semantic colors; values swap with the theme below. */
+  --color-canvas: var(--canvas);
+  --color-panel: var(--panel);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-terminal: var(--terminal);
+  --color-terminal-ink: var(--terminal-ink);
+  --color-terminal-accent: var(--terminal-accent);
+}
+
+/* Warm neutrals with a single green accent. */
+:root {
+  --canvas: #f4f2ec;
+  --panel: #ebe8df;
+  --ink: #171712;
+  --ink-muted: #64625a;
+  --line: #dedbd0;
+  --accent: #1f7a3a;
+  --accent-ink: #ffffff;
+  --terminal: #12150f;
+  --terminal-ink: #dfe6d8;
+  --terminal-accent: #5ee08a;
+}
+
+.dark {
+  --canvas: #0f110e;
+  --panel: #161a14;
+  --ink: #e6e8e1;
+  --ink-muted: #8b9184;
+  --line: #23271f;
+  --accent: #5ee08a;
+  --accent-ink: #0b0d0a;
+  --terminal: #0a0c09;
 }
 
 /*
@@ -88,12 +125,15 @@
   body {
     padding: 0;
     margin: 0;
-    @apply bg-neutral-50 dark:bg-neutral-900;
-    @apply text-neutral-800 dark:text-neutral-300;
+    @apply bg-canvas text-ink;
   }
 
   body {
-    font-family: var(--font-inter), var(--font-roboto), sans-serif;
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    @apply bg-accent text-accent-ink;
   }
 
   a {
