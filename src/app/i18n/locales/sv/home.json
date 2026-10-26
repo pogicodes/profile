@@ -7,7 +7,11 @@
   "about": {
     "kicker": "Om mig",
     "viewResume": "Se hela CV:t",
-    "more": "Mer om mig"
+    "more": "Mer om mig",
+    "title": "Om Carlo Gino Catapang",
+    "elsewhere": "På andra ställen",
+    "seeAlso": "Se även",
+    "source": "Källkoden till sidan"
   },
   "skillsMarquee": {
     "kicker": "Min stack",

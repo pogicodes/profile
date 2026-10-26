@@ -1,16 +1,11 @@
 import {NextPage} from 'next';
-import dynamicImport from 'next/dynamic';
 import {newCommonMetaTags} from '../../frontend-utils/meta-tags';
 import {getBlurringImage} from '../../utils/contentful.utils';
 import {fectchExperiences, fetchSkills} from '../../utils/resume-props';
-import ResumeContactCta from './ResumeContactCta';
-import ResumeHero from './ResumeHero';
+import ResumeContact from './ResumeContact';
+import ResumeExperience from './ResumeExperience';
+import ResumeHeader from './ResumeHeader';
 import ResumeSkills from './ResumeSkills';
-import ResumeTimeline from './ResumeTimeline';
-
-const CustomGithubCalendar = dynamicImport(
-  () => import('../../components/CustomGithubCalendar'),
-);
 
 export const metadata = {
   ...newCommonMetaTags('Resume Page', '/resume'),
@@ -31,29 +26,19 @@ const ResumePage: NextPage = async () => {
   } = await getStaticProps();
 
   return (
-    <main>
-      <ResumeHero
+    <main className="mx-auto max-w-3xl px-5 py-12 sm:py-16 print:max-w-none print:p-0">
+      <ResumeHeader
         img={profileImage}
         svg={profileSvg}
         resumePdfUrl={resumePdfUrl}
         resumeWordUrl={resumeWordUrl}
       />
-      <ResumeTimeline
+      <ResumeExperience
         workExperiences={workExperiences}
         educationExperiences={educationExperiences}
       />
-      <div id="skills">
-        <ResumeSkills skills={skills} />
-      </div>
-      <section className="flex w-full justify-center overflow-hidden px-4">
-        <div className="w-full max-w-4xl">
-          <CustomGithubCalendar />
-        </div>
-      </section>
-      <ResumeContactCta
-        resumePdfUrl={resumePdfUrl}
-        resumeWordUrl={resumeWordUrl}
-      />
+      <ResumeSkills skills={skills} />
+      <ResumeContact />
     </main>
   );
 };

@@ -285,3 +285,26 @@
     }
   }
 }
+
+/* Print: always light, plain white page, no app chrome (see print:hidden). */
+@media print {
+  :root,
+  .dark {
+    --canvas: #ffffff;
+    --panel: #ffffff;
+    --ink: #000000;
+    --ink-muted: #3d3d38;
+    --line: #d4d4cc;
+    --accent: #1f7a3a;
+    --accent-ink: #ffffff;
+  }
+
+  /* Everything is rem-sized, so this scales the whole resume to fit A4. */
+  html {
+    font-size: 12.5px;
+  }
+
+  @page {
+    margin: 14mm 16mm;
+  }
+}

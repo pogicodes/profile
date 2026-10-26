@@ -1,9 +1,12 @@
-import dompurify from 'isomorphic-dompurify';
 import type {Metadata, NextPage} from 'next';
-import AboutMeHero from '../../components/AboutMeHero';
+import {BlurringImage} from '../../components/BlurringImage';
 import NextLink from '../../components/basic/NextLink';
+import CodingActivity from '../../components/home/CodingActivity';
+import SectionLabel from '../../components/SectionLabel';
+import {socialLinks} from '../../components/social/social-links';
 import {newCommonMetaTags} from '../../frontend-utils/meta-tags';
 import {getBlurringImage} from '../../utils/contentful.utils';
+import {createTranslation} from '../i18n/server';
 import {aboutMeData} from '@/models/static-content';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -14,61 +17,124 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const AboutMePage: NextPage = async () => {
+  const {t} = await createTranslation('home');
+  const {t: tResume} = await createTranslation('resume');
   const {
-    props: {aboutMeDetails, img, svg},
+    props: {paragraphs, img, svg},
   } = await getStaticProps();
+
   return (
-    <>
-      <AboutMeHero img={img} svg={svg} />
-      <main>
-        <article className="mb-20 pt-20" id="about-me-details">
-          <h1 className="text-2xl sm:text-3xl">About Carlo Gino Catapang</h1>
-          {aboutMeDetails.map(detail => {
-            return (
-              <section
-                className="flex flex-col items-center p-2 not-last:mb-4"
-                key={detail.key}
-              >
-                <h3 className="mb-4 text-xl">{detail.label}</h3>
-                <div
-                  className="max-w-(--breakpoint-md) px-4 text-justify"
-                  dangerouslySetInnerHTML={{
-                    __html: dompurify.sanitize(detail.content),
-                  }}
-                />
-              </section>
-            );
-          })}
+    <main className="mx-auto max-w-6xl px-5">
+      <div className="grid gap-12 py-12 sm:py-16 lg:grid-cols-[minmax(0,1fr)_280px]">
+        <article aria-labelledby="about-title" className="max-w-[680px]">
+          <SectionLabel as="p">{t('about.kicker')}</SectionLabel>
+          <h1
+            id="about-title"
+            className="m-0 text-left text-3xl leading-tight font-semibold tracking-tight sm:text-4xl"
+          >
+            {t('about.title')}
+          </h1>
+          <p className="m-0 mt-4 text-lg text-balance text-ink-muted">
+            {tResume('tagline')}
+          </p>
+
+          <div className="mt-8 flex flex-col gap-5 text-[1.0625rem] leading-[1.75]">
+            {paragraphs.map(paragraph => (
+              <p key={paragraph} className="m-0 text-[length:inherit]">
+                {paragraph}
+              </p>
+            ))}
+          </div>
         </article>
 
-        <section className="pb-8">
-          <h4 className="text-center">
-            Here is the link to my&nbsp;
-            <NextLink
-              href="https://github.com/pogicodes/profile"
-              target="_blank"
-              aria-label="Github Repo"
-              className="text-primary-900 dark:text-primary-300"
-            >
-              Github Repo
-            </NextLink>
-            .
-          </h4>
-        </section>
-      </main>
-    </>
+        <aside className="space-y-10 lg:sticky lg:top-20 lg:self-start">
+          <div className="relative aspect-square w-40 overflow-hidden rounded-xl ring-1 ring-line lg:w-full">
+            <BlurringImage
+              img={img}
+              svg={svg}
+              alt="Carlo Gino Catapang"
+              title="Carlo Gino Catapang"
+              fill
+              sizes="(min-width: 1024px) 280px, 160px"
+              priority
+              className="object-cover"
+            />
+          </div>
+
+          <section aria-labelledby="about-elsewhere">
+            <SectionLabel id="about-elsewhere">
+              {t('about.elsewhere')}
+            </SectionLabel>
+            <ul className="m-0 list-none space-y-1.5 p-0 font-mono text-sm">
+              {socialLinks.map(link => (
+                <li key={link.url}>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sm lowercase hover:text-accent"
+                  >
+                    {link.label} ↗
+                  </a>
+                </li>
+              ))}
+              <li>
+                <a
+                  href="mailto:carloginocatapang@gmail.com"
+                  className="text-sm hover:text-accent"
+                >
+                  email
+                </a>
+              </li>
+            </ul>
+          </section>
+
+          <section aria-labelledby="about-more">
+            <SectionLabel id="about-more">{t('about.seeAlso')}</SectionLabel>
+            <ul className="m-0 list-none space-y-1.5 p-0 font-mono text-sm">
+              <li>
+                <NextLink href="/resume" className="text-sm hover:text-accent">
+                  ~/resume
+                </NextLink>
+              </li>
+              <li>
+                <NextLink href="/blog" className="text-sm hover:text-accent">
+                  ~/blog
+                </NextLink>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/pogicodes/profile"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm lowercase hover:text-accent"
+                >
+                  {t('about.source')} ↗
+                </a>
+              </li>
+            </ul>
+          </section>
+        </aside>
+      </div>
+
+      <CodingActivity />
+    </main>
   );
 };
 
 const getStaticProps = async () => {
-  // Use local about me data instead of Contentful
-  const aboutMeDetails = aboutMeData.sort((a, b) => a.order - b.order);
+  // First-person bio; the third-person copy is kept in the data for reuse.
+  const bio = aboutMeData.find(item => item.key === 'about_me_long_1st_pov');
+  const paragraphs = (bio?.content ?? '')
+    .split(/\n\s*\n/)
+    .map(paragraph => paragraph.trim())
+    .filter(Boolean);
 
-  const {img, svg} = await getBlurringImage('batman_cover.png');
+  const {img, svg} = await getBlurringImage('profile_picture.jpg');
 
   return {
     props: {
-      aboutMeDetails,
+      paragraphs,
       img,
       svg,
     },

@@ -10,7 +10,7 @@ const Footer: FC = async () => {
   const {t} = await createTranslation('common');
 
   return (
-    <footer className="border-t border-line">
+    <footer className="border-t border-line print:hidden">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-8 font-mono text-xs text-ink-muted lowercase sm:flex-row sm:items-center sm:justify-between">
         <ul className="m-0 flex list-none flex-wrap gap-x-4 gap-y-1 p-0">
           {socialLinks.map(social => (

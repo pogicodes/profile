@@ -7,7 +7,11 @@
   "about": {
     "kicker": "About me",
     "viewResume": "View full resume",
-    "more": "More about me"
+    "more": "More about me",
+    "title": "About Carlo Gino Catapang",
+    "elsewhere": "Elsewhere",
+    "seeAlso": "See also",
+    "source": "Source of this site"
   },
   "skillsMarquee": {
     "kicker": "My stack",

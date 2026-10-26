@@ -84,7 +84,7 @@ export const workExperiences: WorkExperience[] = [
     organization: 'Devoteam Creative Tech',
     url: 'https://se.devoteam.com',
     startDate: '2022/08/02',
-    endDate: '2022/05/31',
+    endDate: '2023/05/31',
     role: 'Software Engineer',
     title: 'Senior Full Stack Developer',
     markdown: `<ul>
@@ -99,7 +99,7 @@ export const workExperiences: WorkExperience[] = [
     organization: 'Tre',
     url: 'https://www.tre.se/',
     startDate: '2023/06/01',
-    endDate: '2022/06/01',
+    endDate: '2023/06/01',
     role: 'Software Engineer',
     title: 'Senior Full Stack Developer',
     markdown: `<p>Projects:</p>
